@@ -1,0 +1,13 @@
+logging:
+  level:
+    root: debug
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
