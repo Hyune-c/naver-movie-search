@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 @Slf4j
 @DisplayName("Naver 영화 검색")
 @ContextConfiguration(initializers = TestContextInitializer.class)
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest
 class MovieSearchControllerTest {
