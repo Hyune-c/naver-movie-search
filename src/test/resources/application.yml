@@ -1,3 +1,10 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  config:
+    activate:
+      on-profile: test
 logging:
   level:
     root: debug
