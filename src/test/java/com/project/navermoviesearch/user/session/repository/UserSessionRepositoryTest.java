@@ -1,10 +1,10 @@
-package com.project.navermoviesearch.user.repository;
+package com.project.navermoviesearch.user.session.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.session.entity.UserSessionEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,30 +16,31 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 @Slf4j
-@DisplayName("회원 Repository")
+@DisplayName("회원 세션 Repository")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @Import({Jackson2ObjectMapperFactoryBean.class, QueryDslConfig.class})
 @ActiveProfiles("test")
 @DataJpaTest
-class UserRepositoryTest {
+class UserSessionRepositoryTest {
 
   @Autowired
-  private UserRepository userRepository;
+  private UserSessionRepository userSessionRepository;
 
   @DisplayName("[성공] 추가")
   @Test
   public void create() {
     // given
-    UserEntity user = UserEntity.of("choi@gmail", "choiroot");
+    long userId = 10L;
+    UserSessionEntity userSession = new UserSessionEntity();
+    userSession.setUserId(userId);
 
     // when
-    userRepository.save(user);
+    userSessionRepository.save(userSession);
 
     // then
-    assertThat(userRepository.findById(user.getId())).isNotNull();
-    assertThat(user.getCreatedAt()).isNotNull();
-    log.info("### createdAt: {}", user.getCreatedAt());
-    assertThat(user.getUpdatedAt()).isNotNull();
-    log.info("### updatedAt: {}", user.getUpdatedAt());
+    assertThat(userSessionRepository.findByUuid(userSession.getUuid())).isNotNull();
+    log.info("### uuid: {}", userSession.getUuid());
+    log.info("### userId: {}", userSession.getUserId());
   }
 }
+
