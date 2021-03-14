@@ -1,10 +1,10 @@
-package com.project.navermoviesearch.controller;
+package com.project.navermoviesearch.controller.moviesearch;
 
 import com.project.navermoviesearch.code.GenreCode;
-import com.project.navermoviesearch.controller.response.MovieListResponse;
-import com.project.navermoviesearch.service.external.NaverSearchMovieService;
-import com.project.navermoviesearch.service.external.dto.SearchMoviesRequestDto;
-import com.project.navermoviesearch.service.external.dto.SearchMoviesResponseDto;
+import com.project.navermoviesearch.controller.moviesearch.response.MovieListResponse;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesRequestDto;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto;
+import com.project.navermoviesearch.moviesearch.service.NaverSearchMovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

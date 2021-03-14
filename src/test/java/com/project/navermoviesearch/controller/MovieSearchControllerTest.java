@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.project.navermoviesearch.code.GenreCode;
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.controller.response.MovieListResponse;
+import com.project.navermoviesearch.controller.moviesearch.response.MovieListResponse;
 import com.project.navermoviesearch.util.TestUtil;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;

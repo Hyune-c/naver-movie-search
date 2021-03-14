@@ -1,10 +1,10 @@
-package com.project.navermoviesearch.service.external;
+package com.project.navermoviesearch.moviesearch.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.navermoviesearch.config.external.NaverConfigure.NaverConfig;
-import com.project.navermoviesearch.service.external.dto.SearchMoviesRequestDto;
-import com.project.navermoviesearch.service.external.dto.SearchMoviesResponseDto;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesRequestDto;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

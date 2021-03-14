@@ -1,7 +1,7 @@
-package com.project.navermoviesearch.controller.response;
+package com.project.navermoviesearch.controller.moviesearch.response;
 
-import com.project.navermoviesearch.service.external.dto.SearchMoviesResponseDto;
-import com.project.navermoviesearch.service.external.dto.SearchMoviesResponseDto.SearchMovieDto;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto;
+import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto.SearchMovieDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +21,11 @@ public class MovieListResponse {
   private List<MovieResponse> movies;
 
   public static MovieListResponse of(SearchMoviesResponseDto dto) {
+    List<MovieResponse> movieResponseList = dto.getItems().stream()
+        .map(MovieResponse::of)
+        .collect(Collectors.toList());
     return MovieListResponse.builder()
-        .movies(dto.getItems().stream()
-            .map(MovieResponse::of)
-            .collect(Collectors.toList()))
+        .movies(movieResponseList)
         .build();
   }
 
@@ -44,6 +45,7 @@ public class MovieListResponse {
     private String title;
 
     public static MovieResponse of(SearchMovieDto movie) {
+      MovieResponse.builder().build();
       return MovieResponse.builder()
           .naverCode(movie.getCode())
           .title(movie.getTitle())

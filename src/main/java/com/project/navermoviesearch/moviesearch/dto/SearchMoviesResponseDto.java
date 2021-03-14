@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.service.external.dto;
+package com.project.navermoviesearch.moviesearch.dto;
 
 import java.util.List;
 import lombok.AccessLevel;
