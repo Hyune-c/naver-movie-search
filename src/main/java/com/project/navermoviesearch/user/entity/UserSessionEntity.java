@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.user.session.entity;
+package com.project.navermoviesearch.user.entity;
 
 import java.util.UUID;
 import javax.persistence.Column;
@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Setter
 @Getter
+@Builder
 @Table(name = "user_session")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
@@ -30,4 +32,10 @@ public class UserSessionEntity {
 
   @JoinColumn(name = "user_id", nullable = false)
   private Long userId;
+
+  public static UserSessionEntity of(UserEntity user) {
+    return UserSessionEntity.builder()
+        .userId(user.getId())
+        .build();
+  }
 }

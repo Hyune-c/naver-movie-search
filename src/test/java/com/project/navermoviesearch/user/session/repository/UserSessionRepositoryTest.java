@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.user.session.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
