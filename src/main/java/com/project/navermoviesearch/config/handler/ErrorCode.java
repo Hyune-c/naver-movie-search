@@ -11,6 +11,7 @@ public enum ErrorCode {
   // 회원
   USER_EXISTS_LOGIN_ID("100001", HttpStatus.CONFLICT, "이미 존재하는 로그인 ID"),
   USER_NOT_EXISTS_OR_WRONG_PASSWORD("100002", HttpStatus.UNAUTHORIZED, "존재하지 않는 회원, 또는 틀린 비밀번호"),
+  USER_NOT_EXISTS("100003", HttpStatus.NOT_FOUND, "존재하지 않는 회원"),
 
   // 기타
   BAD_REQUEST("990400", HttpStatus.BAD_REQUEST, "잘못된 입력 값"),

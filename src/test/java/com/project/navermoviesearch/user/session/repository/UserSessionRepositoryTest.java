@@ -4,11 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.config.TestContextInitializer;
+import com.project.navermoviesearch.user.entity.UserEntity;
 import com.project.navermoviesearch.user.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
+import java.time.LocalDateTime;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -25,15 +31,28 @@ import org.springframework.test.context.ContextConfiguration;
 class UserSessionRepositoryTest {
 
   @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
   private UserSessionRepository userSessionRepository;
 
+  private static Stream<Arguments> createArguments() {
+    return Stream.of(
+        Arguments.of("choi8608@gmail.com", "choiroot")
+    );
+  }
+
   @DisplayName("[성공] 추가")
-  @Test
-  public void create() {
+  @ParameterizedTest
+  @MethodSource("createArguments")
+  public void create(String loginId, String password) {
     // given
-    long userId = 10L;
-    UserSessionEntity userSession = new UserSessionEntity();
-    userSession.setUserId(userId);
+    UserEntity user = UserEntity.of(loginId, password);
+    user.setCreatedAt(LocalDateTime.now());
+    user.setUpdatedAt(LocalDateTime.now());
+    userRepository.save(user);
+
+    UserSessionEntity userSession = UserSessionEntity.of(user);
 
     // when
     userSessionRepository.save(userSession);
@@ -41,7 +60,6 @@ class UserSessionRepositoryTest {
     // then
     assertThat(userSessionRepository.findByUuid(userSession.getUuid())).isNotNull();
     log.info("### uuid: {}", userSession.getUuid());
-    log.info("### userId: {}", userSession.getUserId());
   }
 }
 

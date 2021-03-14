@@ -10,15 +10,22 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserSessionDto {
+public class UserSessionAttribute {
 
   private final UUID uuid;
   private final Long userId;
 
-  public static UserSessionDto of(UserSessionEntity session) {
-    return UserSessionDto.builder()
+  public static UserSessionAttribute of(UserSessionAggregate session) {
+    return UserSessionAttribute.builder()
         .uuid(session.getUuid())
-        .userId(session.getUserId())
+        .userId(session.getUser().getId())
+        .build();
+  }
+
+  public static UserSessionAttribute of(UserSessionEntity session) {
+    return UserSessionAttribute.builder()
+        .uuid(session.getUuid())
+        .userId(session.getUser().getId())
         .build();
   }
 }

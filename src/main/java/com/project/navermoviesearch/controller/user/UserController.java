@@ -2,7 +2,7 @@ package com.project.navermoviesearch.controller.user;
 
 import com.project.navermoviesearch.controller.user.request.UserCreateRequest;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.dto.UserSessionDto;
+import com.project.navermoviesearch.user.dto.UserSessionAttribute;
 import com.project.navermoviesearch.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +36,16 @@ public class UserController {
   @PostMapping("/login")
   public void login(HttpSession httpSession,
       @RequestBody @Valid UserLoginRequest request) {
-    UserSessionDto dto = userService.login(request.getLoginId(), request.getPassword());
-    httpSession.setAttribute("session", dto);
+    UserSessionAttribute session = UserSessionAttribute.of(userService.login(request.getLoginId(), request.getPassword()));
+    httpSession.setAttribute("session", session);
+  }
+
+  @Operation(summary = "로그아웃")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PostMapping("/logout")
+  public void logout(HttpSession httpSession) {
+    UserSessionAttribute session = (UserSessionAttribute) httpSession.getAttribute("session");
+    userService.logout(session.getUserId());
+    httpSession.invalidate();
   }
 }

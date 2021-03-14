@@ -8,16 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.dto.UserSessionDto;
+import com.project.navermoviesearch.user.dto.UserSessionAttribute;
 import com.project.navermoviesearch.user.entity.UserEntity;
-import com.project.navermoviesearch.user.service.UserCreateService;
-import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
+import com.project.navermoviesearch.user.repository.UserRepository;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,32 +44,33 @@ class LoginTest {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private UserCreateService userCreateService;
+  private UserRepository userRepository;
 
   private String url;
+  private UserEntity testUser;
 
-  @PostConstruct
-  private void postConstruct() {
+  @BeforeEach
+  public void postConstruct() {
     url = "/users/login";
+
+    testUser = UserEntity.of("test@test.com", "choiroot");
+    testUser.setCreatedAt(LocalDateTime.now());
+    testUser.setUpdatedAt(LocalDateTime.now());
+    userRepository.save(testUser);
   }
 
-  private static Stream<Arguments> successArguments() {
-    return Stream.of(
-        Arguments.of("choi8608@gmail.com", "choiroot")
-    );
+  @AfterEach
+  public void afterEach() {
+    userRepository.deleteAll();
   }
 
   @DisplayName("[성공]")
-  @ParameterizedTest
-  @MethodSource("successArguments")
-  public void success(String loginId, String password) throws Exception {
+  @Test
+  public void success() throws Exception {
     // given
-    UserEntity user = UserEntity.of(loginId, password);
-    userCreateService.create(user.getLoginId(), user.getPassword());
-
     UserLoginRequest request = UserLoginRequest.builder()
-        .loginId(loginId)
-        .password(password)
+        .loginId(testUser.getLoginId())
+        .password(testUser.getPassword())
         .build();
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))
@@ -83,7 +83,7 @@ class LoginTest {
         .andReturn();
 
     // then
-    UserSessionDto session = (UserSessionDto) result.getRequest().getSession().getAttribute("session");
+    UserSessionAttribute session = (UserSessionAttribute) result.getRequest().getSession().getAttribute("session");
     assertThat(session.getUuid()).isNotNull();
     log.info("### getUuid(): {}", session.getUuid());
     assertThat(session.getUserId()).isNotNull();
@@ -91,16 +91,12 @@ class LoginTest {
   }
 
   @DisplayName("[성공] 2번 연속 로그인")
-  @ParameterizedTest
-  @MethodSource("successArguments")
-  public void success_loginAgain(String loginId, String password) throws Exception {
+  @Test
+  public void success_loginAgain() throws Exception {
     // given
-    UserEntity user = UserEntity.of(loginId, password);
-    userCreateService.create(user.getLoginId(), user.getPassword());
-
     UserLoginRequest request = UserLoginRequest.builder()
-        .loginId(loginId)
-        .password(password)
+        .loginId(testUser.getLoginId())
+        .password(testUser.getPassword())
         .build();
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))
@@ -109,7 +105,7 @@ class LoginTest {
         .andDo(print())
         .andExpect(status().isNoContent())
         .andReturn();
-    UserSessionDto firstSession = (UserSessionDto) firstResult.getRequest().getSession().getAttribute("session");
+    UserSessionAttribute firstSession = (UserSessionAttribute) firstResult.getRequest().getSession().getAttribute("session");
 
     // when
     MvcResult secondResult = mockMvc.perform(requestBuilder)
@@ -118,7 +114,7 @@ class LoginTest {
         .andReturn();
 
     // then
-    UserSessionDto secondSession = (UserSessionDto) secondResult.getRequest().getSession().getAttribute("session");
+    UserSessionAttribute secondSession = (UserSessionAttribute) secondResult.getRequest().getSession().getAttribute("session");
     assertThat(secondSession.getUuid()).isNotNull();
     log.info("### getUuid(): {}", secondSession.getUuid());
     assertThat(secondSession.getUserId()).isNotNull();
@@ -129,23 +125,13 @@ class LoginTest {
     assertThat(firstSession.getUuid()).isNotEqualTo(secondSession.getUuid());
   }
 
-  private static Stream<Arguments> failedArguments() {
-    return Stream.of(
-        Arguments.of("choi8608@gmail.com", "choiroot")
-    );
-  }
-
   @DisplayName("[실패] 존재하지 않는 로그인 아이디")
-  @ParameterizedTest
-  @MethodSource("failedArguments")
-  public void failed_notExistLoginId(String loginId, String password) throws Exception {
+  @Test
+  public void failed_notExistLoginId() throws Exception {
     // given
-    UserEntity user = UserEntity.of(loginId, password);
-    userCreateService.create(user.getLoginId(), user.getPassword());
-
     UserLoginRequest request = UserLoginRequest.builder()
-        .loginId(loginId + "asdf")
-        .password(password)
+        .loginId(testUser.getLoginId() + "asdf")
+        .password(testUser.getPassword())
         .build();
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))
@@ -161,16 +147,12 @@ class LoginTest {
   }
 
   @DisplayName("[실패] 틀린 비밀번호")
-  @ParameterizedTest
-  @MethodSource("failedArguments")
-  public void failed_wrongPassword(String loginId, String password) throws Exception {
+  @Test
+  public void failed_wrongPassword() throws Exception {
     // given
-    UserEntity user = UserEntity.of(loginId, password);
-    userCreateService.create(user.getLoginId(), user.getPassword());
-
     UserLoginRequest request = UserLoginRequest.builder()
-        .loginId(loginId)
-        .password(password + "asd")
+        .loginId(testUser.getLoginId())
+        .password(testUser.getPassword() + "asd")
         .build();
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))

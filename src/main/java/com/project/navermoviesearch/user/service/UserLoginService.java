@@ -2,8 +2,8 @@ package com.project.navermoviesearch.user.service;
 
 import com.project.navermoviesearch.config.handler.ErrorCode;
 import com.project.navermoviesearch.config.handler.exception.BusinessException;
-import com.project.navermoviesearch.user.dto.UserSessionDto;
 import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.UserSessionEntity;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class UserLoginService {
   private final UserRepository userRepository;
   private final UserSessionService userSessionService;
 
-  public UserSessionDto login(String loginId, String password) {
+  public UserSessionEntity login(String loginId, String password) {
     return userRepository.findByLoginId(loginId)
         .map(user -> {
           validatePassword(password, user);

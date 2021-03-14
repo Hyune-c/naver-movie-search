@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,15 +28,16 @@ public class UserSessionEntity {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(name = "uuid", columnDefinition = "BINARY(16)")
+  @Column(name = "id", columnDefinition = "BINARY(16)")
   private UUID uuid;
 
+  @OneToOne
   @JoinColumn(name = "user_id", nullable = false)
-  private Long userId;
+  private UserEntity user;
 
   public static UserSessionEntity of(UserEntity user) {
     return UserSessionEntity.builder()
-        .userId(user.getId())
+        .user(user)
         .build();
   }
 }
