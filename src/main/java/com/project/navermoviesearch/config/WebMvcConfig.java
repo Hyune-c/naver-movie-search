@@ -1,5 +1,6 @@
 package com.project.navermoviesearch.config;
 
+import com.project.navermoviesearch.config.httplog.LoggingInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

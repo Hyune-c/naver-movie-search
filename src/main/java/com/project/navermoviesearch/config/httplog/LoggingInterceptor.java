@@ -1,6 +1,8 @@
-package com.project.navermoviesearch.config;
+package com.project.navermoviesearch.config.httplog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.navermoviesearch.config.httplog.entity.HttpLogEntity;
+import com.project.navermoviesearch.config.httplog.repository.HttpLogRepository;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 public class LoggingInterceptor implements HandlerInterceptor {
 
   private final ObjectMapper objectMapper;
+  private final HttpLogRepository httpLogRepository;
 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
@@ -28,9 +31,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
     final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
     final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 
-    log.info("### basicParams: {}", objectMapper.writeValueAsString(basicData));
-    log.info("### request Body : {}", objectMapper.readTree(cachingRequest.getContentAsByteArray()));
-    log.info("### response Body : {}", objectMapper.readTree(cachingResponse.getContentAsByteArray()));
+    httpLogRepository.save(HttpLogEntity.of(
+        objectMapper.writeValueAsString(basicData),
+        objectMapper.writeValueAsString(request.getParameterMap()),
+        objectMapper.readTree(cachingRequest.getContentAsByteArray()).toString(),
+        objectMapper.readTree(cachingResponse.getContentAsByteArray()).toString()));
   }
 
   private Map<String, String> createBasicData(HttpServletRequest request, HttpServletResponse response) {
