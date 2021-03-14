@@ -5,6 +5,9 @@ spring:
   config:
     activate:
       on-profile: test
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 logging:
   level:
     root: debug
