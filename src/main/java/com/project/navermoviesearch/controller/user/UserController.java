@@ -6,6 +6,7 @@ import com.project.navermoviesearch.user.dto.UserSessionAttribute;
 import com.project.navermoviesearch.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,8 @@ public class UserController {
   @Operation(summary = "로그인")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PostMapping("/login")
-  public void login(HttpSession httpSession,
-      @RequestBody @Valid UserLoginRequest request) {
-    UserSessionAttribute session = UserSessionAttribute.of(userService.login(request.getLoginId(), request.getPassword()));
-    httpSession.setAttribute("session", session);
+  public UUID login(@RequestBody @Valid UserLoginRequest request) {
+    return userService.login(request.getLoginId(), request.getPassword());
   }
 
   @Operation(summary = "로그아웃")

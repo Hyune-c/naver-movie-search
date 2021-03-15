@@ -1,6 +1,6 @@
 package com.project.navermoviesearch.user.service;
 
-import com.project.navermoviesearch.user.dto.UserSessionAggregate;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ public class UserService {
     return userCreateService.create(loginId, password);
   }
 
-  public UserSessionAggregate login(String loginId, String password) {
-    return UserSessionAggregate.of(userLoginService.login(loginId, password));
+  public UUID login(String loginId, String password) {
+    return userLoginService.login(loginId, password);
   }
 
   public void logout(long userId) {

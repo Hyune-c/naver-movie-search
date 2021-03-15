@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.user.service;
+package com.project.navermoviesearch.user.service.session;
 
 import com.project.navermoviesearch.user.entity.UserEntity;
 import com.project.navermoviesearch.user.entity.UserSessionEntity;
