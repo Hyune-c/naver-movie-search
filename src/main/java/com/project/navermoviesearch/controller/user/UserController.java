@@ -1,15 +1,16 @@
 package com.project.navermoviesearch.controller.user;
 
+import com.project.navermoviesearch.config.annotation.LoginUser;
 import com.project.navermoviesearch.controller.user.request.UserCreateRequest;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.dto.UserSessionAttribute;
+import com.project.navermoviesearch.user.entity.UserSessionEntity;
 import com.project.navermoviesearch.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Tag(name = "회원")
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -42,9 +44,7 @@ public class UserController {
   @Operation(summary = "로그아웃")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PostMapping("/logout")
-  public void logout(HttpSession httpSession) {
-    UserSessionAttribute session = (UserSessionAttribute) httpSession.getAttribute("session");
-    userService.logout(session.getUserId());
-    httpSession.invalidate();
+  public void logout(@LoginUser UserSessionEntity session) {
+    userService.logout(session.getUser().getId());
   }
 }

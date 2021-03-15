@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.user.service;
+package com.project.navermoviesearch.user.service.session;
 
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import lombok.RequiredArgsConstructor;
