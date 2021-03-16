@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.moviesearch.dto;
+package com.project.navermoviesearch.external.dto;
 
 import com.project.navermoviesearch.code.CountryCode;
 import com.project.navermoviesearch.code.GenreCode;
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchMoviesRequestDto {
+public class NaverSearchMoviesRequest {
 
   private final String query; // 검색을 원하는 질의.
 
@@ -26,8 +26,8 @@ public class SearchMoviesRequestDto {
 
   private final Integer yearto; // 검색을 원하는 영화의 제작년도(최대)를 의미한다.
 
-  public static SearchMoviesRequestDto forNaver(String query, GenreCode genre) {
-    return SearchMoviesRequestDto.builder()
+  public static NaverSearchMoviesRequest of(String query, GenreCode genre) {
+    return NaverSearchMoviesRequest.builder()
         .query(query)
         .display(100)
         .start(1)

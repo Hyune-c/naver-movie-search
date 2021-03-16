@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.user.entity.UserEntity;
-import com.project.navermoviesearch.user.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.entity.User;
+import com.project.navermoviesearch.user.entity.UserSession;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import java.time.LocalDateTime;
@@ -47,12 +47,12 @@ class UserSessionRepositoryTest {
   @MethodSource("createArguments")
   public void create(String loginId, String password) {
     // given
-    UserEntity user = UserEntity.of(loginId, password);
+    User user = User.of(loginId, password);
     user.setCreatedAt(LocalDateTime.now());
     user.setUpdatedAt(LocalDateTime.now());
     userRepository.save(user);
 
-    UserSessionEntity userSession = UserSessionEntity.of(user);
+    UserSession userSession = UserSession.of(user);
 
     // when
     userSessionRepository.save(userSession);

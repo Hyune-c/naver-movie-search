@@ -1,7 +1,7 @@
 package com.project.navermoviesearch.user.service.session;
 
-import com.project.navermoviesearch.user.entity.UserEntity;
-import com.project.navermoviesearch.user.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.entity.User;
+import com.project.navermoviesearch.user.entity.UserSession;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class UserSessionCreateService {
   /*
     이미 로그인 되어 있는 세션이 있다면 삭제합니다.
    */
-  public UserSessionEntity create(UserEntity user) {
+  public UserSession create(User user) {
     userSessionRepository.deleteAllByUserId(user.getId());
-    return userSessionRepository.save(UserSessionEntity.of(user));
+    return userSessionRepository.save(UserSession.of(user));
   }
 }

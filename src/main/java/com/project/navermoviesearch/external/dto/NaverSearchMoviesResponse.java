@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.moviesearch.dto;
+package com.project.navermoviesearch.external.dto;
 
 import java.util.List;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchMoviesResponseDto {
+public class NaverSearchMoviesResponse {
 
   private final String lastBuildDate;
 
@@ -17,11 +17,11 @@ public class SearchMoviesResponseDto {
 
   private final Integer display;
 
-  private final List<SearchMovieDto> items;
+  private final List<NaverMovie> items;
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
-  public static class SearchMovieDto {
+  public static class NaverMovie {
 
     private final String title;
     private final String link;

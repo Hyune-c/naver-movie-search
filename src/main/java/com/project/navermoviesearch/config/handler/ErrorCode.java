@@ -16,6 +16,11 @@ public enum ErrorCode {
   // 회원 세션
   USER_SESSION_NOT_EXISTS("101001", HttpStatus.NOT_FOUND, "존재하지 않는 세션"),
 
+  // 외부 서비스
+  // 네이버 영화검색
+  EXTERNAL_ILLEGAL_DATA("809400", HttpStatus.CONFLICT, "외부 서비스 데이터 처리 실패"),
+  EXTERNAL_UNKNOWN_FAILED("809500", HttpStatus.CONFLICT, "알수 없는 외부 서비스 실패"),
+
   // 기타
   BAD_REQUEST("990400", HttpStatus.BAD_REQUEST, "잘못된 입력 값"),
   FORBIDDEN("990403", HttpStatus.FORBIDDEN, "권한 없음"),

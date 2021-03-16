@@ -1,7 +1,7 @@
-package com.project.navermoviesearch.controller.moviesearch.response;
+package com.project.navermoviesearch.controller.movie.external.response;
 
-import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto;
-import com.project.navermoviesearch.moviesearch.dto.SearchMoviesResponseDto.SearchMovieDto;
+import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
+import com.project.navermoviesearch.external.dto.NaverSearchMoviesResponse.NaverMovie;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,17 +15,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
-public class MovieListResponse {
+public class ExternalMovieListResponse {
 
   @Schema(description = "영화 목록")
-  private List<MovieResponse> movies;
+  private List<ExternalMovieResponse> movies;
 
-  public static MovieListResponse of(SearchMoviesResponseDto dto) {
-    List<MovieResponse> movieResponseList = dto.getItems().stream()
-        .map(MovieResponse::of)
+  public static ExternalMovieListResponse of(NaverSearchMovieAggregate aggregate) {
+    List<ExternalMovieResponse> externalMovieResponseList = aggregate.getMovieList().stream()
+        .map(ExternalMovieResponse::of)
         .collect(Collectors.toList());
-    return MovieListResponse.builder()
-        .movies(movieResponseList)
+    return ExternalMovieListResponse.builder()
+        .movies(externalMovieResponseList)
         .build();
   }
 
@@ -33,7 +33,7 @@ public class MovieListResponse {
   @Builder
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   @NoArgsConstructor
-  public static class MovieResponse {
+  public static class ExternalMovieResponse {
 
     @Schema(description = "영화 ID")
     private Long id;
@@ -44,9 +44,9 @@ public class MovieListResponse {
     @Schema(description = "영화 제목")
     private String title;
 
-    public static MovieResponse of(SearchMovieDto movie) {
-      MovieResponse.builder().build();
-      return MovieResponse.builder()
+    public static ExternalMovieResponse of(NaverMovie movie) {
+      ExternalMovieResponse.builder().build();
+      return ExternalMovieResponse.builder()
           .naverCode(movie.getCode())
           .title(movie.getTitle())
           .build();

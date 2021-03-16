@@ -2,7 +2,7 @@ package com.project.navermoviesearch.user.service;
 
 import com.project.navermoviesearch.config.handler.ErrorCode;
 import com.project.navermoviesearch.config.handler.exception.BusinessException;
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.service.session.UserSessionService;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class UserLoginService {
         }).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD));
   }
 
-  private void validatePassword(String password, UserEntity user) {
+  private void validatePassword(String password, User user) {
     if (!password.equals(user.getPassword())) {
       throw new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD);
     }

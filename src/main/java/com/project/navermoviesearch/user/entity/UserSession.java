@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
 @Entity
-public class UserSessionEntity {
+public class UserSession {
 
   @Id
   @GeneratedValue(generator = "uuid2")
@@ -33,10 +33,10 @@ public class UserSessionEntity {
 
   @OneToOne
   @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+  private User user;
 
-  public static UserSessionEntity of(UserEntity user) {
-    return UserSessionEntity.builder()
+  public static UserSession of(User user) {
+    return UserSession.builder()
         .user(user)
         .build();
   }

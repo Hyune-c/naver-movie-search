@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import com.project.navermoviesearch.user.service.session.UserSessionService;
@@ -49,7 +49,7 @@ class LogoutTest {
 
   private String url;
   private String authorizationKey;
-  private UserEntity testUser;
+  private User testUser;
 
   @BeforeEach
   public void beforeEach() {
@@ -57,7 +57,7 @@ class LogoutTest {
 
     authorizationKey = "Authorization";
 
-    testUser = UserEntity.of("test@test.com", "choiroot");
+    testUser = User.of("test@test.com", "choiroot");
     testUser.setCreatedAt(LocalDateTime.now());
     testUser.setUpdatedAt(LocalDateTime.now());
     userRepository.save(testUser);

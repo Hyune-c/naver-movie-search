@@ -1,6 +1,6 @@
 package com.project.navermoviesearch.user.service;
 
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserCreateService {
       throw new RuntimeException("이미 존재하는 로그인 ID");
     }
 
-    UserEntity user = UserEntity.of(loginId, password);
+    User user = User.of(loginId, password);
     return userRepository.save(user).getId();
   }
 }

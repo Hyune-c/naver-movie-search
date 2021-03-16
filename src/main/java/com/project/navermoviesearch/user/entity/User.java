@@ -26,7 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class UserEntity {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +50,8 @@ public class UserEntity {
   @Column(name = "deleted", nullable = false)
   private Boolean deleted;
 
-  public static UserEntity of(String loginId, String password) {
-    return UserEntity.builder()
+  public static User of(String loginId, String password) {
+    return User.builder()
         .loginId(loginId)
         .password(password)
         .deleted(false)

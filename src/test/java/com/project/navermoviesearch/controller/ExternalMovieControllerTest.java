@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.project.navermoviesearch.code.GenreCode;
 import com.project.navermoviesearch.config.TestContextInitializer;
-import com.project.navermoviesearch.controller.moviesearch.response.MovieListResponse;
+import com.project.navermoviesearch.controller.movie.external.response.ExternalMovieListResponse;
 import com.project.navermoviesearch.util.TestUtil;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 @Slf4j
-@DisplayName("Naver 영화 검색")
+@DisplayName("영화 (외부 서비스)")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest
-class MovieSearchControllerTest {
+class ExternalMovieControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -37,12 +37,12 @@ class MovieSearchControllerTest {
 
   @PostConstruct
   private void postConstruct() {
-    url = "/movies";
+    url = "/external/movies";
   }
 
-  @DisplayName("성공")
+  @DisplayName("[성공] 검색")
   @Test
-  public void success() throws Exception {
+  public void search() throws Exception {
     // given
     String query = "살아있다";
     GenreCode genre = GenreCode.DRAMA;
@@ -57,7 +57,7 @@ class MovieSearchControllerTest {
         .andReturn();
 
     // then
-    MovieListResponse response = TestUtil.mvcResultToObject(result, MovieListResponse.class);
+    ExternalMovieListResponse response = TestUtil.mvcResultToObject(result, ExternalMovieListResponse.class);
     assertThat(response.getMovies().size()).isGreaterThan(0);
     response.getMovies().forEach(movie -> assertThat(movie.getTitle()).isNotNull());
   }

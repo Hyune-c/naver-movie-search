@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
 import com.project.navermoviesearch.util.TestUtil;
@@ -52,13 +52,13 @@ class LoginTest {
   private UserSessionRepository userSessionRepository;
 
   private String url;
-  private UserEntity testUser;
+  private User testUser;
 
   @BeforeEach
   public void beforeEach() {
     url = "/users/login";
 
-    testUser = UserEntity.of("test@test.com", "choiroot");
+    testUser = User.of("test@test.com", "choiroot");
     testUser.setCreatedAt(LocalDateTime.now());
     testUser.setUpdatedAt(LocalDateTime.now());
     userRepository.save(testUser);

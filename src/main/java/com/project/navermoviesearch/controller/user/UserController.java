@@ -3,7 +3,7 @@ package com.project.navermoviesearch.controller.user;
 import com.project.navermoviesearch.config.annotation.LoginUser;
 import com.project.navermoviesearch.controller.user.request.UserCreateRequest;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.entity.UserSessionEntity;
+import com.project.navermoviesearch.user.entity.UserSession;
 import com.project.navermoviesearch.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,7 +44,7 @@ public class UserController {
   @Operation(summary = "로그아웃")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PostMapping("/logout")
-  public void logout(@LoginUser UserSessionEntity session) {
+  public void logout(@LoginUser UserSession session) {
     userService.logout(session.getUser().getId());
   }
 }
