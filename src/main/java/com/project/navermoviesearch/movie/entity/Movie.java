@@ -1,5 +1,6 @@
 package com.project.navermoviesearch.movie.entity;
 
+import com.project.navermoviesearch.external.dto.NaverSearchMoviesResponse.NaverMovie;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Setter
 @Getter
+@Builder
 @Table(name = "movie")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
@@ -76,5 +78,19 @@ public class Movie {
 
   public static Movie of(String title) {
     return new Movie(title);
+  }
+
+  public static Movie of(NaverMovie movie) {
+    return Movie.builder()
+        .title(movie.getTitle())
+        .linkUrl(movie.getLink())
+        .imageUrl(movie.getImage())
+        .subTitle(movie.getSubtitle())
+        .publishYear(movie.getPubDate())
+        .directors(movie.getDirector())
+        .actors(movie.getActor())
+        .deleted(false)
+        .genres(new ArrayList<>())
+        .build();
   }
 }

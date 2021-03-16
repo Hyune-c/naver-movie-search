@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +20,7 @@ public class NaverSearchMoviesResponse {
 
   private final List<NaverMovie> items;
 
+  @Slf4j
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class NaverMovie {

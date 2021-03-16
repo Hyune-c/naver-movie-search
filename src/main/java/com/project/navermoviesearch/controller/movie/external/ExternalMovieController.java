@@ -1,6 +1,5 @@
 package com.project.navermoviesearch.controller.movie.external;
 
-import com.project.navermoviesearch.code.GenreCode;
 import com.project.navermoviesearch.controller.movie.external.response.ExternalMovieListResponse;
 import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.service.NaverSearchMovieService;
@@ -22,9 +21,8 @@ public class ExternalMovieController {
   @Operation(summary = "Naver 영화 검색", description = "외부 서비스에서 영화 정보를 검색합니다.")
   @GetMapping("/external/movies")
   public ExternalMovieListResponse searchList(
-      @Parameter(description = "검색 질의문") @RequestParam String query,
-      @Parameter(description = "장르 코드") @RequestParam GenreCode genre) {
-    NaverSearchMovieAggregate aggregate = naverSearchMovieService.searchMovies(query, genre);
+      @Parameter(description = "검색 질의문") @RequestParam String query) {
+    NaverSearchMovieAggregate aggregate = naverSearchMovieService.searchMovies(query);
 
     return ExternalMovieListResponse.of(aggregate);
   }

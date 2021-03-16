@@ -5,17 +5,18 @@ import static com.project.navermoviesearch.config.handler.ErrorCode.EXTERNAL_UNK
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.navermoviesearch.code.GenreCode;
 import com.project.navermoviesearch.config.external.NaverConfigure.NaverConfig;
 import com.project.navermoviesearch.config.handler.exception.BusinessException;
 import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.dto.NaverSearchMoviesRequest;
 import com.project.navermoviesearch.external.dto.NaverSearchMoviesResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class NaverSearchMovieService {
@@ -25,13 +26,13 @@ public class NaverSearchMovieService {
 
   private final ObjectMapper objectMapper;
 
-  public NaverSearchMovieAggregate searchMovies(String query, GenreCode genreCode) {
-    String responseString = request(NaverSearchMoviesRequest.of(query, genreCode))
+  public NaverSearchMovieAggregate searchMovies(String query) {
+    String responseString = request(NaverSearchMoviesRequest.of(query))
         .block();
 
     try {
       NaverSearchMoviesResponse response = objectMapper.readValue(responseString, NaverSearchMoviesResponse.class);
-      return NaverSearchMovieAggregate.of(response, genreCode);
+      return NaverSearchMovieAggregate.of(response);
     } catch (JsonProcessingException ex) {
       throw new BusinessException(EXTERNAL_ILLEGAL_DATA);
     } catch (Exception ex) {
@@ -39,6 +40,10 @@ public class NaverSearchMovieService {
     }
   }
 
+  /*
+    - 네이버 API 의 기술적인 문제로 Genre 는 사용하지 않습니다.
+    - 대신 추가 목표로 모든 연도를 대상으로 합니다.
+   */
   private Mono<String> request(NaverSearchMoviesRequest request) {
     return WebClient.builder()
         .baseUrl(BASE_URL)
@@ -52,10 +57,7 @@ public class NaverSearchMovieService {
             .queryParam("query", request.getQuery())
             .queryParam("display", request.getDisplay())
             .queryParam("start", request.getStart())
-            .queryParam("genre", request.getGenre().getNaverCode())
             .queryParam("country", request.getCountry())
-            .queryParam("yearfrom", request.getYearfrom())
-            .queryParam("yearto", request.getYearto())
             .build())
         .retrieve()
         .bodyToMono(String.class);

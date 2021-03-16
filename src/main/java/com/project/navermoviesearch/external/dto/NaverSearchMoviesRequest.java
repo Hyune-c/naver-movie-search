@@ -26,15 +26,19 @@ public class NaverSearchMoviesRequest {
 
   private final Integer yearto; // 검색을 원하는 영화의 제작년도(최대)를 의미한다.
 
-  public static NaverSearchMoviesRequest of(String query, GenreCode genre) {
+  /*
+    - 네이버 API 의 기술적인 문제로 Genre 는 사용하지 않습니다.
+    - 대신 추가 목표로 모든 연도를 대상으로 합니다.
+   */
+  public static NaverSearchMoviesRequest of(String query) {
     return NaverSearchMoviesRequest.builder()
         .query(query)
         .display(100)
         .start(1)
-        .genre(genre)
+        .genre(null)
         .country(CountryCode.KR)
-        .yearfrom(2020)
-        .yearto(2020)
+        .yearfrom(null)
+        .yearto(null)
         .build();
   }
 }

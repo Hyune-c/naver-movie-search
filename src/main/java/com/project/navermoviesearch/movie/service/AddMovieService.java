@@ -1,11 +1,11 @@
 package com.project.navermoviesearch.movie.service;
 
-import com.project.navermoviesearch.code.GenreCode;
+import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.service.NaverSearchMovieService;
 import com.project.navermoviesearch.movie.entity.Movie;
-import com.project.navermoviesearch.movie.entity.MovieGenre;
 import com.project.navermoviesearch.movie.repository.MovieRepository;
-import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +16,16 @@ public class AddMovieService {
   private final NaverSearchMovieService naverSearchMovieService;
   private final MovieRepository movieRepository;
 
-  public Movie addMovie(String title) {
-    Movie movie = movieRepository.findByTitle(title).orElseGet(() -> Movie.of(title));
-    Arrays.stream(GenreCode.values()).forEach(genreCode -> {
-      if (naverSearchMovieService.searchMovies(title, genreCode).hasMovie()) {
-        movie.getGenres().add(MovieGenre.of(genreCode, movie));
-      }
-
-      try {
-        Thread.sleep(2000L);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    });
-
-    return movieRepository.save(movie);
+  /*
+    외부 서비스를 통해 영화 제목을 기반으로 검색합니다.
+    DB 에 존재하지 않는 영화라면 저장합니다.
+   */
+  public List<Movie> addMovie(String title) {
+    NaverSearchMovieAggregate naverSearchMovieAggregate = naverSearchMovieService.searchMovies(title);
+    return naverSearchMovieAggregate.getMovieList().stream()
+        .map(Movie::of)
+        .filter(movie -> movieRepository.findByTitle(movie.getTitle()).isEmpty())
+        .map(movieRepository::save)
+        .collect(Collectors.toList());
   }
 }
