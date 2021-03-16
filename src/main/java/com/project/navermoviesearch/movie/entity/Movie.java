@@ -24,7 +24,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Setter
 @Getter
-@Builder
 @Table(name = "movie")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
@@ -36,7 +35,7 @@ public class Movie {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "title", nullable = false)
+  @Column(name = "title", nullable = false, unique = true)
   private String title;
 
   @Column(name = "link_url")
@@ -71,7 +70,11 @@ public class Movie {
   @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MovieGenre> genres = new ArrayList<>();
 
-  public Movie(String title) {
+  protected Movie(String title) {
     this.title = title;
+  }
+
+  public static Movie of(String title) {
+    return new Movie(title);
   }
 }

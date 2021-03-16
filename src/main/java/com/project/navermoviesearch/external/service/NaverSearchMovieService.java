@@ -31,7 +31,7 @@ public class NaverSearchMovieService {
 
     try {
       NaverSearchMoviesResponse response = objectMapper.readValue(responseString, NaverSearchMoviesResponse.class);
-      return NaverSearchMovieAggregate.of(response);
+      return NaverSearchMovieAggregate.of(response, genreCode);
     } catch (JsonProcessingException ex) {
       throw new BusinessException(EXTERNAL_ILLEGAL_DATA);
     } catch (Exception ex) {
@@ -52,7 +52,7 @@ public class NaverSearchMovieService {
             .queryParam("query", request.getQuery())
             .queryParam("display", request.getDisplay())
             .queryParam("start", request.getStart())
-            .queryParam("genre", request.getGenre())
+            .queryParam("genre", request.getGenre().getNaverCode())
             .queryParam("country", request.getCountry())
             .queryParam("yearfrom", request.getYearfrom())
             .queryParam("yearto", request.getYearto())

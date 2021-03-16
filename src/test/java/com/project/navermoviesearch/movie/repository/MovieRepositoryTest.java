@@ -36,7 +36,7 @@ class MovieRepositoryTest {
   @Test
   public void createWithGenres() {
     // given
-    Movie movie = new Movie("test title");
+    Movie movie = Movie.of("test title");
     movie.getGenres().addAll(
         List.of(MovieGenre.of(GenreCode.ACTION, movie),
             MovieGenre.of(GenreCode.SF, movie),
@@ -56,7 +56,7 @@ class MovieRepositoryTest {
   @Test
   public void deleteWithGenres() {
     // given
-    Movie movie = new Movie("parent 45");
+    Movie movie = Movie.of("parent 45");
     movie.getGenres().addAll(
         List.of(MovieGenre.of(GenreCode.ACTION, movie),
             MovieGenre.of(GenreCode.SF, movie),
@@ -79,7 +79,7 @@ class MovieRepositoryTest {
   @Test
   public void deleteOnlyGenres() {
     // given
-    Movie movie = new Movie("parent 45");
+    Movie movie = Movie.of("parent 45");
     movie.getGenres().addAll(
         List.of(MovieGenre.of(GenreCode.ACTION, movie),
             MovieGenre.of(GenreCode.SF, movie),
