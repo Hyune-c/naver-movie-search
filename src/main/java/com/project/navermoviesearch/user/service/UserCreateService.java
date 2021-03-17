@@ -1,5 +1,8 @@
 package com.project.navermoviesearch.user.service;
 
+import static com.project.navermoviesearch.config.handler.ErrorCode.USER_EXISTS_LOGIN_ID;
+
+import com.project.navermoviesearch.config.handler.exception.BusinessException;
 import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +16,7 @@ public class UserCreateService {
 
   public long create(String loginId, String password) throws RuntimeException {
     if (userRepository.existsByLoginId(loginId)) {
-      throw new RuntimeException("이미 존재하는 로그인 ID");
+      throw new BusinessException(USER_EXISTS_LOGIN_ID);
     }
 
     User user = User.of(loginId, password);

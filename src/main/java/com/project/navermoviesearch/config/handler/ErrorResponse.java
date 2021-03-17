@@ -1,25 +1,27 @@
 package com.project.navermoviesearch.config.handler;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ErrorResponse {
 
   private String code;
   private String message;
-  private OffsetDateTime time;
-
-  private ErrorResponse(ErrorCode errorCode) {
-    this.code = errorCode.getCode();
-    this.message = errorCode.getReason();
-    this.time = OffsetDateTime.now();
-  }
+  private LocalDateTime time;
 
   public static ErrorResponse of(ErrorCode code) {
-    return new ErrorResponse(code);
+    return ErrorResponse.builder()
+        .code(code.getCode())
+        .message(code.getReason())
+        .time(LocalDateTime.now())
+        .build();
   }
 }

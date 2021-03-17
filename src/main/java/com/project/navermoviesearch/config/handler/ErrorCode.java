@@ -29,6 +29,7 @@ public enum ErrorCode {
   // 기타
   BAD_REQUEST("990400", HttpStatus.BAD_REQUEST, "잘못된 입력 값"),
   FORBIDDEN("990403", HttpStatus.FORBIDDEN, "권한 없음"),
+  NOT_FOUND("990404", HttpStatus.NOT_FOUND, "찾을 수 없음"),
   METHOD_NOT_ALLOWED("990405", HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 메소드"),
   UNKNOWN("990500", HttpStatus.INTERNAL_SERVER_ERROR, "알수 없는 서버 에러");
 
