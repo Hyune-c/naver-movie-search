@@ -76,6 +76,10 @@ public class Movie {
   @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MovieComment> comments;
 
+  public void delete() {
+    this.deleted = true;
+  }
+
   protected Movie(String title) {
     this.title = title;
     this.genres = new ArrayList<>();

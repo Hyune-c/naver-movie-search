@@ -3,7 +3,6 @@ package com.project.navermoviesearch.movie.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.code.GenreCode;
-import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.entity.MovieGenre;
@@ -13,18 +12,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@DisplayName("영화 Repository")
+@DisplayName("[repository] 영화 삭제")
 @ContextConfiguration(initializers = TestContextInitializer.class)
-@Import({Jackson2ObjectMapperFactoryBean.class, QueryDslConfig.class})
+@Transactional
 @ActiveProfiles("test")
 @DataJpaTest
-class MovieRepositoryTest {
+class DeleteTest {
 
   @Autowired
   private MovieRepository movieRepository;
@@ -32,29 +30,9 @@ class MovieRepositoryTest {
   @Autowired
   private MovieGenreRepository movieGenreRepository;
 
-  @DisplayName("[성공] 추가 with 장르")
-  @Test
-  public void createWithGenres() {
-    // given
-    Movie movie = Movie.of("test title");
-    movie.getGenres().addAll(
-        List.of(MovieGenre.of(GenreCode.ACTION, movie),
-            MovieGenre.of(GenreCode.SF, movie),
-            MovieGenre.of(GenreCode.DRAMA, movie))
-    );
-
-    // when
-    this.movieRepository.save(movie);
-
-    // then
-    assertThat(movieRepository.findById(movie.getId())).isPresent();
-    assertThat(movieRepository.findById(movie.getId()).get().getGenres().size()).isGreaterThan(0);
-    assertThat(movieGenreRepository.findAllByMovie_id(movie.getId()).size()).isGreaterThan(0);
-  }
-
   @DisplayName("[성공] 삭제")
   @Test
-  public void deleteWithGenres() {
+  public void withGenres() {
     // given
     Movie movie = Movie.of("parent 45");
     movie.getGenres().addAll(
@@ -77,7 +55,7 @@ class MovieRepositoryTest {
 
   @DisplayName("[성공] 삭제 - 장르만")
   @Test
-  public void deleteOnlyGenres() {
+  public void onlyGenres() {
     // given
     Movie movie = Movie.of("parent 45");
     movie.getGenres().addAll(
