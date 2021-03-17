@@ -14,7 +14,11 @@ public class UserSessionService {
   private final UserSessionDeleteService userSessionDeleteService;
   private final UserSessionFindService userSessionFindService;
 
+  /*
+    이미 로그인 되어 있는 세션이 있다면 삭제합니다.
+   */
   public UUID create(User user) {
+    deleteAllByUserId(user.getId());
     return userSessionCreateService.create(user).getUuid();
   }
 

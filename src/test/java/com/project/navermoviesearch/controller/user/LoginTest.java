@@ -84,7 +84,7 @@ class LoginTest {
     // when
     MvcResult result = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
 
     // then
@@ -103,9 +103,10 @@ class LoginTest {
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))
         .contentType(MediaType.APPLICATION_JSON);
+
     MvcResult firstResult = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
     UUID firstUuid = TestUtil.mvcResultToObject(firstResult, UUID.class);
     assertThat(userSessionRepository.findByUuid(firstUuid)).isNotNull();
@@ -113,7 +114,7 @@ class LoginTest {
     // when
     MvcResult secondResult = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
 
     // then

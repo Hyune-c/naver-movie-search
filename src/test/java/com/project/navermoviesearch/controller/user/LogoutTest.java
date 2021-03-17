@@ -1,6 +1,7 @@
 package com.project.navermoviesearch.controller.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,7 +76,7 @@ class LogoutTest {
     UUID uuid = userSessionService.create(testUser);
     assertThat(userSessionRepository.findByUuid(uuid)).isPresent();
 
-    RequestBuilder requestBuilder = post(url)
+    RequestBuilder requestBuilder = delete(url)
         .header(authorizationKey, uuid);
 
     // when
@@ -95,7 +96,7 @@ class LogoutTest {
     UUID uuid = userSessionService.create(testUser);
     assertThat(userSessionRepository.findByUuid(uuid)).isPresent();
 
-    RequestBuilder requestBuilder = post(url)
+    RequestBuilder requestBuilder = delete(url)
         .header(authorizationKey, uuid.toString() + "1");
 
     // when

@@ -4,6 +4,7 @@ import com.project.navermoviesearch.config.annotation.LoginUser;
 import com.project.navermoviesearch.config.handler.ErrorCode;
 import com.project.navermoviesearch.config.handler.exception.BusinessException;
 import com.project.navermoviesearch.user.service.session.UserSessionService;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +35,10 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
     LoginUser loginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class);
 
-    String authorizationValue = request.getHeader(AUTHORIZATION_KEY);
+    String authorizationValue = Optional.ofNullable(request.getHeader(AUTHORIZATION_KEY)).orElse("");
 
     // 1. authorization 이 존재하면 세션을 확인 후 반환합니다.
-    if (!authorizationValue.isEmpty()) {
+    if (!authorizationValue.isBlank()) {
       try {
         return userSessionService.findByAuthorization(authorizationValue);
       } catch (Exception ex) {

@@ -17,12 +17,11 @@ public class UserLoginService {
   private final UserSessionService userSessionService;
 
   public UUID login(String loginId, String password) {
-    return userRepository.findByLoginId(loginId)
-        .map(user -> {
-          validatePassword(password, user);
+    User user = userRepository.findByLoginId(loginId)
+        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD));
+    validatePassword(password, user);
 
-          return userSessionService.create(user);
-        }).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD));
+    return userSessionService.create(user);
   }
 
   private void validatePassword(String password, User user) {
