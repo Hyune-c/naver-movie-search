@@ -1,6 +1,7 @@
 package com.project.navermoviesearch.movie.entity;
 
 import com.project.navermoviesearch.external.dto.NaverSearchMoviesResponse.NaverMovie;
+import com.project.navermoviesearch.movie.comment.entity.MovieComment;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +68,19 @@ public class Movie {
   private LocalDateTime updatedAt;
 
   @Column(name = "deleted", nullable = false)
-  private Boolean deleted = false;
+  private Boolean deleted;
 
   @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<MovieGenre> genres = new ArrayList<>();
+  private List<MovieGenre> genres;
+
+  @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<MovieComment> comments;
 
   protected Movie(String title) {
     this.title = title;
+    this.genres = new ArrayList<>();
+    this.comments = new ArrayList<>();
+    this.deleted = false;
   }
 
   public static Movie of(String title) {
@@ -91,6 +98,7 @@ public class Movie {
         .actors(movie.getActor())
         .deleted(false)
         .genres(new ArrayList<>())
+        .comments(new ArrayList<>())
         .build();
   }
 }
