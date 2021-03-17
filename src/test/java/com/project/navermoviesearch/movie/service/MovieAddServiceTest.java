@@ -23,10 +23,10 @@ import org.springframework.test.context.ContextConfiguration;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @SpringBootTest
-class AddMovieServiceTest {
+class MovieAddServiceTest {
 
   @Autowired
-  private AddMovieService addMovieService;
+  private MovieAddService movieAddService;
 
   @Autowired
   private MovieRepository movieRepository;
@@ -47,7 +47,7 @@ class AddMovieServiceTest {
     //given
 
     // when
-    List<Movie> movies = addMovieService.addMovie(title);
+    List<Movie> movies = movieAddService.addMovie(title);
 
     // then
     movies.forEach(movie -> assertThat(movieRepository.findById(movie.getId())).isPresent());
@@ -58,12 +58,12 @@ class AddMovieServiceTest {
   @MethodSource("existMovieTitleFromNaver")
   public void success_alreadyExists(String title) {
     //given
-    addMovieService.addMovie(title);
+    movieAddService.addMovie(title);
     int beforeSize = movieRepository.findAll().size();
     assertThat(beforeSize).isGreaterThan(0);
 
     // when
-    addMovieService.addMovie(title);
+    movieAddService.addMovie(title);
 
     // then
     int afterSize = movieRepository.findAll().size();
@@ -81,7 +81,7 @@ class AddMovieServiceTest {
     //given
 
     // when
-    List<Movie> movieList = addMovieService.addMovie(title);
+    List<Movie> movieList = movieAddService.addMovie(title);
 
     // then
     assertThat(movieList.size()).isEqualTo(0);

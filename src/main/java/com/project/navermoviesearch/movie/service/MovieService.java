@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class MovieService {
 
-  private final AddMovieService addMovieService;
+  private final MovieAddService movieAddService;
 
   public void addMovie(String title) {
-    addMovieService.addMovie(title);
+    movieAddService.addMovie(title);
   }
 }

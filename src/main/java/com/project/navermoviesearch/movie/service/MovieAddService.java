@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AddMovieService {
+public class MovieAddService {
 
   private final NaverSearchMovieService naverSearchMovieService;
   private final MovieRepository movieRepository;

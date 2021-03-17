@@ -1,6 +1,6 @@
-package com.project.navermoviesearch.controller.movie.external;
+package com.project.navermoviesearch.controller.external;
 
-import com.project.navermoviesearch.controller.movie.external.response.ExternalMovieListResponse;
+import com.project.navermoviesearch.controller.external.response.ExternalMovieListResponse;
 import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.service.NaverSearchMovieService;
 import io.swagger.v3.oas.annotations.Operation;

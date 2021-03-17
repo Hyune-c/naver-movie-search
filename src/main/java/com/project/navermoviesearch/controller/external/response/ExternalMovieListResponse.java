@@ -1,4 +1,4 @@
-package com.project.navermoviesearch.controller.movie.external.response;
+package com.project.navermoviesearch.controller.external.response;
 
 import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.dto.NaverSearchMoviesResponse.NaverMovie;
