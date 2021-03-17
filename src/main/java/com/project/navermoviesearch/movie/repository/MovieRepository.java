@@ -16,4 +16,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
   List<Movie> findAllByTitleContainingAndDeletedIsFalse(String title);
 
   Slice<Movie> findAllByTitleContainingAndDeletedIsFalse(Pageable pageable, String title);
+
+  Optional<Movie> findByIdAndDeletedIsFalse(Long aLong);
 }
