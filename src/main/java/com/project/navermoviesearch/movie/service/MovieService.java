@@ -4,6 +4,8 @@ import com.project.navermoviesearch.movie.MovieAggregate;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -21,5 +23,9 @@ public class MovieService {
     return movieSearchService.search(title).stream()
         .map(MovieAggregate::of)
         .collect(Collectors.toList());
+  }
+
+  public Slice<MovieAggregate> search(Pageable pageable, String title) {
+    return movieSearchService.search(pageable, title).map(MovieAggregate::of);
   }
 }

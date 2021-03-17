@@ -5,10 +5,12 @@ import com.project.navermoviesearch.movie.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +27,12 @@ public class MovieController {
 
   @Operation(summary = "검색")
   @GetMapping
-  public List<MovieResponse> searchAll(
-      @Parameter(description = "제목") @RequestParam String title) {
-    return movieService.search(title).stream()
-        .map(MovieResponse::of)
-        .collect(Collectors.toList());
+  public Slice<MovieResponse> search(
+      @Parameter(description = "제목") @RequestParam String title,
+      @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
+      @RequestParam(defaultValue = "10") @Positive Integer size) {
+    PageRequest pageRequest = PageRequest.of(page, size);
+    return movieService.search(pageRequest, title)
+        .map(MovieResponse::of);
   }
 }
