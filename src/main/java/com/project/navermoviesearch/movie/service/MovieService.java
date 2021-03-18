@@ -35,7 +35,7 @@ public class MovieService {
     return movieSearchService.search(pageable, title).map(MovieAggregate::of);
   }
 
-  public long createComment(long movieId, User user, String content) {
+  public long create(long movieId, User user, String content) {
     return movieCommentCreateService.createComment(
         movieFindService.findById(movieId), user, content).getId();
   }

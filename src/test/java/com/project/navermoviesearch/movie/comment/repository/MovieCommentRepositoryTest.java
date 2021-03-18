@@ -74,7 +74,7 @@ class MovieCommentRepositoryTest {
 
     // then
     assertThat(movieRepository.findById(movie.getId())).isPresent();
-    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser).size()).isEqualTo(2);
+    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser).size()).isEqualTo(2);
   }
 
   @DisplayName("[성공] 추가 - 서로 다른 회원")
@@ -98,8 +98,8 @@ class MovieCommentRepositoryTest {
 
     // then
     assertThat(movieRepository.findById(movie.getId())).isPresent();
-    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser).size()).isEqualTo(contentList1.size());
-    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser2).size()).isEqualTo(contentList2.size());
+    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser).size()).isEqualTo(contentList1.size());
+    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser2).size()).isEqualTo(contentList2.size());
     assertThat(movieCommentRepository.findAll().size()).isEqualTo(contentList1.size() + contentList2.size());
   }
 }
