@@ -2,6 +2,7 @@ package com.project.navermoviesearch.movie.service;
 
 import com.project.navermoviesearch.movie.MovieAggregate;
 import com.project.navermoviesearch.movie.comment.service.MovieCommentCreateService;
+import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.user.entity.User;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,5 +38,9 @@ public class MovieService {
   public long createComment(long movieId, User user, String content) {
     return movieCommentCreateService.createComment(
         movieFindService.findById(movieId), user, content).getId();
+  }
+
+  public Movie findByMovieId(long movieId) {
+    return movieFindService.findById(movieId);
   }
 }
