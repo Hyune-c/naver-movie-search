@@ -32,16 +32,16 @@ public class HttpLogEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "basic_data", nullable = false)
+  @Column(name = "basic_data", nullable = false, columnDefinition = "text")
   private String basicData;
 
-  @Column(name = "request_params", nullable = false)
+  @Column(name = "request_params", nullable = false, columnDefinition = "text")
   private String requestParams;
 
-  @Column(name = "request_body", nullable = false)
+  @Column(name = "request_body", nullable = false, columnDefinition = "text")
   private String requestBody;
 
-  @Column(name = "response_body", nullable = false)
+  @Column(name = "response_body", nullable = false, columnDefinition = "text")
   private String responseBody;
 
   @CreatedDate

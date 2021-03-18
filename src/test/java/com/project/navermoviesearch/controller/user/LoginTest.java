@@ -8,10 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
-import com.project.navermoviesearch.user.dto.UserSessionAttribute;
-import com.project.navermoviesearch.user.entity.UserEntity;
+import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
+import com.project.navermoviesearch.user.repository.UserSessionRepository;
+import com.project.navermoviesearch.util.TestUtil;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,14 +48,17 @@ class LoginTest {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private UserSessionRepository userSessionRepository;
+
   private String url;
-  private UserEntity testUser;
+  private User testUser;
 
   @BeforeEach
-  public void postConstruct() {
+  public void beforeEach() {
     url = "/users/login";
 
-    testUser = UserEntity.of("test@test.com", "choiroot");
+    testUser = User.of("test@test.com", "choiroot");
     testUser.setCreatedAt(LocalDateTime.now());
     testUser.setUpdatedAt(LocalDateTime.now());
     userRepository.save(testUser);
@@ -79,15 +84,12 @@ class LoginTest {
     // when
     MvcResult result = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
 
     // then
-    UserSessionAttribute session = (UserSessionAttribute) result.getRequest().getSession().getAttribute("session");
-    assertThat(session.getUuid()).isNotNull();
-    log.info("### getUuid(): {}", session.getUuid());
-    assertThat(session.getUserId()).isNotNull();
-    log.info("### getUserId(): {}", session.getUserId());
+    UUID uuid = TestUtil.mvcResultToObject(result, UUID.class);
+    assertThat(userSessionRepository.findByUuid(uuid)).isNotNull();
   }
 
   @DisplayName("[성공] 2번 연속 로그인")
@@ -101,28 +103,26 @@ class LoginTest {
     RequestBuilder requestBuilder = post(url)
         .content(objectMapper.writeValueAsString(request))
         .contentType(MediaType.APPLICATION_JSON);
+
     MvcResult firstResult = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
-    UserSessionAttribute firstSession = (UserSessionAttribute) firstResult.getRequest().getSession().getAttribute("session");
+    UUID firstUuid = TestUtil.mvcResultToObject(firstResult, UUID.class);
+    assertThat(userSessionRepository.findByUuid(firstUuid)).isNotNull();
 
     // when
     MvcResult secondResult = mockMvc.perform(requestBuilder)
         .andDo(print())
-        .andExpect(status().isNoContent())
+        .andExpect(status().isOk())
         .andReturn();
 
     // then
-    UserSessionAttribute secondSession = (UserSessionAttribute) secondResult.getRequest().getSession().getAttribute("session");
-    assertThat(secondSession.getUuid()).isNotNull();
-    log.info("### getUuid(): {}", secondSession.getUuid());
-    assertThat(secondSession.getUserId()).isNotNull();
-    log.info("### getUserId(): {}", secondSession.getUserId());
+    UUID secondUuid = TestUtil.mvcResultToObject(secondResult, UUID.class);
+    assertThat(userSessionRepository.findByUuid(secondUuid)).isNotNull();
 
     // 2번 로그인하면 세션 UUID 가 서로 달라야합니다.
-    assertThat(firstSession.getUserId()).isEqualTo(secondSession.getUserId());
-    assertThat(firstSession.getUuid()).isNotEqualTo(secondSession.getUuid());
+    assertThat(firstUuid).isNotEqualTo(secondUuid);
   }
 
   @DisplayName("[실패] 존재하지 않는 로그인 아이디")
