@@ -20,6 +20,9 @@ public enum ErrorCode {
   MOVIE_ALREADY_EXISTS("400001", HttpStatus.CONFLICT, "이미 존재하는 영화"),
   MOVIE_FAILED_ADD("400002", HttpStatus.CONFLICT, "영화 추가 실패"),
 
+  // 코멘트
+  COMMENTS_NOT_EXISTS("500001", HttpStatus.CONFLICT, "존재하지 않는 코멘트"),
+
   // 외부 서비스
   // 네이버 영화검색
   EXTERNAL_ILLEGAL_DATA("809400", HttpStatus.CONFLICT, "외부 서비스 데이터 처리 실패"),

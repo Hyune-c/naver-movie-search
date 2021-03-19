@@ -58,6 +58,10 @@ public class MovieComment {
   @Column(name = "deleted", nullable = false)
   private Boolean deleted;
 
+  public void delete(){
+    this.deleted = true;
+  }
+
   public static MovieComment of(Movie movie, User user, String content) {
     return MovieComment.builder()
         .user(user)
