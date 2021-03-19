@@ -1,6 +1,6 @@
 package com.project.navermoviesearch.controller.movie.response;
 
-import com.project.navermoviesearch.movie.MovieAggregate;
+import com.project.navermoviesearch.movie.MovieDto;
 import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.entity.MovieGenre;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,8 +47,11 @@ public class MovieResponse {
   @Schema(description = "코멘트 수")
   private Integer commentCount;
 
-  public static MovieResponse of(MovieAggregate aggregate) {
-    Movie movie = aggregate.getMovie();
+  @Schema(description = "평균 점수")
+  private Double averageRating;
+
+  public static MovieResponse of(MovieDto dto) {
+    Movie movie = dto.getMovie();
     return MovieResponse.builder()
         .id(movie.getId())
         .title(movie.getTitle())
@@ -59,7 +62,8 @@ public class MovieResponse {
         .directors(movie.getDirectors())
         .actors(movie.getActors())
         .genres(movie.getGenres())
-        .commentCount(movie.getComments().size())
+        .commentCount(dto.commentCount())
+        .averageRating(dto.getAverageRating())
         .build();
   }
 }

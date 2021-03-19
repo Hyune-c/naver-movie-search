@@ -1,12 +1,13 @@
 package com.project.navermoviesearch.controller.movie.rating;
 
 import com.project.navermoviesearch.config.annotation.LoginUser;
+import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.rating.service.MovieRatingService;
+import com.project.navermoviesearch.movie.service.MovieService;
 import com.project.navermoviesearch.user.entity.UserSession;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovieRatingController {
 
   private final MovieRatingService movieRatingService;
+  private final MovieService movieService;
 
   @Operation(summary = "추가/수정")
   @ResponseStatus(HttpStatus.CREATED)
@@ -37,6 +39,7 @@ public class MovieRatingController {
       @LoginUser UserSession session,
       @Parameter(description = "영화 ID") @PathVariable Long movieId,
       @Parameter(description = "평점") @RequestParam @Min(1) @Max(5) Integer score) {
-    return movieRatingService.createOrUpdate(movieId, session.getUser(), score);
+    Movie movie = movieService.findByMovieId(movieId);
+    return movieRatingService.createOrUpdate(movie, session.getUser(), score);
   }
 }

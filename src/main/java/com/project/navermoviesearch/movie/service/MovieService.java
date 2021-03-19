@@ -1,8 +1,9 @@
 package com.project.navermoviesearch.movie.service;
 
-import com.project.navermoviesearch.movie.MovieAggregate;
+import com.project.navermoviesearch.movie.MovieDto;
 import com.project.navermoviesearch.movie.comment.service.MovieCommentCreateService;
 import com.project.navermoviesearch.movie.entity.Movie;
+import com.project.navermoviesearch.movie.rating.service.MovieRatingService;
 import com.project.navermoviesearch.user.entity.User;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,18 +22,24 @@ public class MovieService {
 
   private final MovieCommentCreateService movieCommentCreateService;
 
+  private final MovieRatingService movieRatingService;
+
   public void addMovie(String title) {
     movieAddService.addMovie(title);
   }
 
-  public List<MovieAggregate> search(String title) {
+  public List<MovieDto> search(String title) {
     return movieSearchService.search(title).stream()
-        .map(MovieAggregate::of)
+        .map(MovieDto::of)
         .collect(Collectors.toList());
   }
 
-  public Slice<MovieAggregate> search(Pageable pageable, String title) {
-    return movieSearchService.search(pageable, title).map(MovieAggregate::of);
+  public Slice<MovieDto> search(Pageable pageable, String title) {
+    return movieSearchService.search(pageable, title)
+        .map(movie -> {
+          double averageRating = movieRatingService.calcAverageRating(movie);
+          return MovieDto.of(movie, averageRating);
+        });
   }
 
   public long create(long movieId, User user, String content) {
