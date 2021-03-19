@@ -10,13 +10,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class NaverSearchMovieAggregate {
 
-  private final List<NaverMovie> movieList;
+  private List<NaverMovie> movieList;
 
   public static NaverSearchMovieAggregate of(NaverSearchMoviesResponse response) {
     return NaverSearchMovieAggregate.builder()

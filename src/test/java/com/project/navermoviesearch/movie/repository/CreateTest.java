@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@DisplayName("[repository] 영화 추가")
+@DisplayName("[repo] 영화 추가")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @Transactional
 @ActiveProfiles("test")

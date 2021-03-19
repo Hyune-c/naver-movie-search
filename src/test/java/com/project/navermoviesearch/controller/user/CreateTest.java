@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@DisplayName("회원 가입 Controller")
+@DisplayName("[web] 회원 가입")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
