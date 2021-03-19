@@ -2,7 +2,6 @@ package com.project.navermoviesearch.movie.rating.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.rating.entity.MovieRating;
 import com.project.navermoviesearch.movie.rating.repository.MovieRatingRepository;
@@ -17,17 +16,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @DisplayName("[service] 영화 평점")
-@ContextConfiguration(initializers = TestContextInitializer.class)
 @Sql({"classpath:database/initUser.sql", "classpath:database/initMovie.sql"})
 @Transactional
-@ActiveProfiles("test")
 @SpringBootTest
 class MovieRatingServiceTest {
 
@@ -54,12 +49,6 @@ class MovieRatingServiceTest {
     movieList = movieRepository.findAll();
     user = userList.get(0);
     movie = movieList.get(0);
-  }
-
-  @AfterEach
-  public void afterEach() {
-    userRepository.deleteAll();
-    movieRepository.deleteAll();
   }
 
   @DisplayName("[성공] 추가")

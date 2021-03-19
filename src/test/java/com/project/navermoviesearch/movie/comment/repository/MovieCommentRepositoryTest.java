@@ -2,7 +2,6 @@ package com.project.navermoviesearch.movie.comment.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.movie.comment.entity.MovieComment;
 import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.repository.MovieRepository;
@@ -18,14 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @DisplayName("[repository] 영화 코멘트")
-@ContextConfiguration(initializers = TestContextInitializer.class)
 @Transactional
-@ActiveProfiles("test")
 @DataJpaTest
 class MovieCommentRepositoryTest {
 

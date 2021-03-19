@@ -3,7 +3,6 @@ package com.project.navermoviesearch.user.session.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.navermoviesearch.config.QueryDslConfig;
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.entity.UserSession;
 import com.project.navermoviesearch.user.repository.UserRepository;
@@ -20,11 +19,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 @Slf4j
 @DisplayName("[repository] 회원 세션")
-@ContextConfiguration(initializers = TestContextInitializer.class)
 @Import({Jackson2ObjectMapperFactoryBean.class, QueryDslConfig.class})
 @ActiveProfiles("test")
 @DataJpaTest

@@ -5,12 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.entity.UserSession;
 import com.project.navermoviesearch.user.repository.UserRepository;
 import com.project.navermoviesearch.user.repository.UserSessionRepository;
-import com.project.navermoviesearch.user.service.session.UserSessionService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -28,11 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @DisplayName("[web] 회원 로그아웃 ")
-@ContextConfiguration(initializers = TestContextInitializer.class)
 @Sql({"classpath:database/initUser.sql"})
 @Transactional
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 @SpringBootTest
 class LogoutTest {
 
