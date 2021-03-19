@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@DisplayName("회원 가입 Service")
+@DisplayName("[service] 회원 가입 ")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc

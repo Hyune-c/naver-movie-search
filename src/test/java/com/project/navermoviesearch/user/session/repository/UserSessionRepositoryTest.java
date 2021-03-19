@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 @Slf4j
-@DisplayName("회원 세션 Repository")
+@DisplayName("[repository] 회원 세션")
 @ContextConfiguration(initializers = TestContextInitializer.class)
 @Import({Jackson2ObjectMapperFactoryBean.class, QueryDslConfig.class})
 @ActiveProfiles("test")
