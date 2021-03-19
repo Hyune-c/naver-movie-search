@@ -1,14 +1,19 @@
 # 네이버 영화 검색 API 로 어플리케이션을 만들어보자.
 
 지금까지 학습하고 경험한 것들로 토이 프로젝트를 만들고 있습니다.  
-주로 회사 업무 제약상 시도하지 못했던 기능이나 구현되어 있어 해보지 못했던 것들을 위주로 간결하게 개발하고 있습니다.  
+주로 회사 업무 제약상 시도하지 못했던 기능이나 구현되어 있어 해보지 못했던 것들을 위주로 간결하게 개발하고 있습니다.
 
 ### 개발 환경
+
+[![<naver-movie-search>](https://circleci.com/gh/Hyune-c/naver-movie-search.svg?style=svg)]()
+[![codecov](https://codecov.io/gh/Hyune-c/naver-movie-search/branch/develop/graph/badge.svg?token=Y717LWS77L)](https://codecov.io/gh/Hyune-c/naver-movie-search)
 
 - Spring Boot 2.4.3
 - Java 11, Gradle
 - DB
     - H2, mysql 8.0.17 (docker)
+- openApi 1.4.8
+- CI - circle CI
 
 ### Wiki
 
