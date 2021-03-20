@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.controller.user.request.UserLoginRequest;
 import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
@@ -23,8 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -32,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @DisplayName("[web] 회원 로그인")
-@ContextConfiguration(initializers = TestContextInitializer.class)
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
 @SpringBootTest

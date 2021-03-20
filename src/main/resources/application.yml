@@ -21,4 +21,11 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
-
+logging:
+  level:
+    root: debug
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

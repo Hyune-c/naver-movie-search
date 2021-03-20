@@ -74,14 +74,14 @@ public class ExceptionAdvice {
 
   @ExceptionHandler(BusinessException.class)
   protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-    log.error("### handleBusinessException: {}", ex.getMessage());
+    log.error("### handleBusinessException", ex);
     return new ResponseEntity<>(ErrorResponse.of(ex.getErrorCode()), ex.getErrorCode().getStatus());
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ErrorResponse handleException(Exception ex) {
-    log.error("### handleException: {}", ex.getMessage());
+    log.error("### handleException", ex);
     return ErrorResponse.of(ErrorCode.UNKNOWN);
   }
 }

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +61,7 @@ public class MovieCommentController {
   }
 
   @Operation(summary = "내 목록")
-  @GetMapping("/comments/my")
+  @GetMapping("/my")
   public Page<MovieCommentResponse> findByMe(
       @LoginUser UserSession session,
       @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
@@ -68,5 +69,13 @@ public class MovieCommentController {
     PageRequest pageRequest = PageRequest.of(page, size);
     return movieCommentService.findByMe(pageRequest, session.getUser())
         .map(MovieCommentResponse::of);
+  }
+
+  @Operation(summary = "삭제")
+  @DeleteMapping("/{commentId}")
+  public void delete(
+      @LoginUser UserSession session,
+      @Parameter(description = "코멘트 ID") @PathVariable Long commentId) {
+    movieCommentService.delete(session.getUser(), commentId);
   }
 }

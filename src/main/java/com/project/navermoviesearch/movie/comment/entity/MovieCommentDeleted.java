@@ -19,18 +19,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Setter
 @Getter
 @Builder
-@Table(name = "movie_comment")
+@Table(name = "movie_comment_deleted")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class MovieComment {
+public class MovieCommentDeleted {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,18 +47,14 @@ public class MovieComment {
   private String content;
 
   @CreatedDate
-  @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  @Column(name = "deleted_at", nullable = false)
+  private LocalDateTime deletedAt;
 
-  @LastModifiedDate
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
-
-  public static MovieComment of(Movie movie, User user, String content) {
-    return MovieComment.builder()
-        .user(user)
-        .movie(movie)
-        .content(content)
+  public static MovieCommentDeleted of(MovieComment movieComment) {
+    return MovieCommentDeleted.builder()
+        .user(movieComment.getUser())
+        .movie(movieComment.getMovie())
+        .content(movieComment.getContent())
         .build();
   }
 }

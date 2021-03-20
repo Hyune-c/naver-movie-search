@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.navermoviesearch.config.TestContextInitializer;
 import com.project.navermoviesearch.external.NaverSearchMovieAggregate;
 import com.project.navermoviesearch.external.service.NaverSearchMovieService;
 import com.project.navermoviesearch.movie.entity.Movie;
@@ -15,22 +14,19 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @DisplayName("[service] 영화 추가")
-@ContextConfiguration(initializers = TestContextInitializer.class)
 @AutoConfigureMockMvc
 @Transactional
-@ActiveProfiles("test")
 @SpringBootTest
 class MovieAddServiceTest {
 
@@ -48,7 +44,7 @@ class MovieAddServiceTest {
 
   @AfterEach
   public void afterEach() throws InterruptedException {
-    Thread.sleep(500L);
+//    Thread.sleep(500L);
   }
 
   public static String[] existMovieTitleFromNaver() {
@@ -86,13 +82,13 @@ class MovieAddServiceTest {
   }
 
   @DisplayName("[성공] 이미 존재하는 영화")
-  @ParameterizedTest
-  @MethodSource("existMovieTitleFromNaver")
-  public void success_alreadyExists(String title) throws JsonProcessingException {
+  @Test
+  public void success_alreadyExists() throws JsonProcessingException {
     //given
     when(naverSearchMovieService.searchMovies(any()))
         .thenReturn(objectMapper.readValue(searchMovieResult, NaverSearchMovieAggregate.class));
 
+    String title = "테스트 영화 이";
     movieAddService.addMovie(title);
     int beforeSize = movieRepository.findAll().size();
     assertThat(beforeSize).isGreaterThan(0);

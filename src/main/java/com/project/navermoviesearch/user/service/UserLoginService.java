@@ -17,8 +17,8 @@ public class UserLoginService {
   private final UserSessionService userSessionService;
 
   public UUID login(String loginId, String password) {
-    User user = userRepository.findByLoginId(loginId)
-        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD));
+    User user = userRepository.findByLoginId(loginId).orElseThrow(()
+        -> new BusinessException(ErrorCode.USER_NOT_EXISTS_OR_WRONG_PASSWORD));
     validatePassword(password, user);
 
     return userSessionService.create(user);

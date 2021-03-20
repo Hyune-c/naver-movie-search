@@ -1,5 +1,8 @@
 package com.project.navermoviesearch.movie.comment.service;
 
+import static com.project.navermoviesearch.config.handler.ErrorCode.COMMENTS_NOT_EXISTS;
+
+import com.project.navermoviesearch.config.handler.exception.BusinessException;
 import com.project.navermoviesearch.movie.comment.entity.MovieComment;
 import com.project.navermoviesearch.movie.comment.repository.MovieCommentRepository;
 import com.project.navermoviesearch.movie.entity.Movie;
@@ -19,11 +22,17 @@ public class MovieCommentFindService {
 
   @Transactional
   public Slice<MovieComment> findByMovie(Pageable pageable, Movie movie) {
-    return movieCommentRepository.findAllByMovieAndDeletedIsFalse(pageable, movie);
+    return movieCommentRepository.findAllByMovie(pageable, movie);
   }
 
   @Transactional
   public Page<MovieComment> findByUser(Pageable pageable, User user) {
-    return movieCommentRepository.findAllByUserAndDeletedIsFalse(pageable, user);
+    return movieCommentRepository.findAllByUser(pageable, user);
+  }
+
+  @Transactional
+  public MovieComment findById(long commentId) {
+    return movieCommentRepository.findById(commentId)
+        .orElseThrow(() -> new BusinessException(COMMENTS_NOT_EXISTS));
   }
 }
