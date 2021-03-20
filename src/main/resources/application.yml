@@ -21,6 +21,7 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+#spring.batch.job.names: ${job.name:NONE}
 logging:
   level:
     root: debug
