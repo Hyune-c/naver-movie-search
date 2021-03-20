@@ -18,6 +18,7 @@ public class MovieSearchService {
     return movieRepository.findAllByTitleContainingAndDeletedIsFalse(title);
   }
 
+  // TODO: MovieDto 를 반환할 수 있도록 개선한다.
   public Slice<Movie> search(Pageable pageable, String title) {
     return movieRepository.findAllByTitleContainingAndDeletedIsFalse(pageable, title);
   }
