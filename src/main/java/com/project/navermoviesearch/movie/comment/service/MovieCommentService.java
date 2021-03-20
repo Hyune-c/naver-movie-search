@@ -31,21 +31,10 @@ public class MovieCommentService {
   public void delete(User user, long commentId) {
     MovieComment movieComment = movieCommentFindService.findById(commentId);
 
-    if (validateDelete(user, movieComment)) {
-      return;
-    }
-
-    movieCommentDeleteService.delete(movieComment);
-  }
-
-  /*
-    검증: 작성자 여부,기 삭제 여부
-   */
-  private boolean validateDelete(User user, MovieComment movieComment) {
     if (!user.equals(movieComment.getUser())) {
       throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
-    return movieComment.getDeleted();
+    movieCommentDeleteService.delete(movieComment);
   }
 }

@@ -22,12 +22,12 @@ public class MovieCommentFindService {
 
   @Transactional
   public Slice<MovieComment> findByMovie(Pageable pageable, Movie movie) {
-    return movieCommentRepository.findAllByMovieAndDeletedIsFalse(pageable, movie);
+    return movieCommentRepository.findAllByMovie(pageable, movie);
   }
 
   @Transactional
   public Page<MovieComment> findByUser(Pageable pageable, User user) {
-    return movieCommentRepository.findAllByUserAndDeletedIsFalse(pageable, user);
+    return movieCommentRepository.findAllByUser(pageable, user);
   }
 
   @Transactional

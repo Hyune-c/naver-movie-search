@@ -21,7 +21,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
-@DisplayName("[repository] 회원 세션")
+@DisplayName("[repo] 회원 세션")
 @Import({Jackson2ObjectMapperFactoryBean.class, QueryDslConfig.class})
 @ActiveProfiles("test")
 @DataJpaTest

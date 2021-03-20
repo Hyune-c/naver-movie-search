@@ -11,9 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MovieCommentRepository extends JpaRepository<MovieComment, Long> {
 
-  List<MovieComment> findAllByMovieAndUserAndDeletedIsFalse(Movie movie, User user);
+  List<MovieComment> findAllByMovieAndUser(Movie movie, User user);
 
-  Slice<MovieComment> findAllByMovieAndDeletedIsFalse(Pageable pageable, Movie movie);
+  Slice<MovieComment> findAllByMovie(Pageable pageable, Movie movie);
 
-  Page<MovieComment> findAllByUserAndDeletedIsFalse(Pageable pageable, User user);
+  Page<MovieComment> findAllByUser(Pageable pageable, User user);
 }
