@@ -2,6 +2,7 @@ package com.project.navermoviesearch.movie.comment.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.project.navermoviesearch.config.QueryDslConfig;
 import com.project.navermoviesearch.movie.comment.entity.MovieComment;
 import com.project.navermoviesearch.movie.entity.Movie;
 import com.project.navermoviesearch.movie.repository.MovieRepository;
@@ -16,11 +17,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@DisplayName("[repository] 영화 코멘트")
+@DisplayName("[repo] 영화 코멘트")
+@Import(QueryDslConfig.class)
 @Transactional
 @DataJpaTest
 class MovieCommentRepositoryTest {
@@ -70,7 +72,7 @@ class MovieCommentRepositoryTest {
 
     // then
     assertThat(movieRepository.findById(movie.getId())).isPresent();
-    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser).size()).isEqualTo(2);
+    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser).size()).isEqualTo(2);
   }
 
   @DisplayName("[성공] 추가 - 서로 다른 회원")
@@ -94,8 +96,8 @@ class MovieCommentRepositoryTest {
 
     // then
     assertThat(movieRepository.findById(movie.getId())).isPresent();
-    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser).size()).isEqualTo(contentList1.size());
-    assertThat(movieCommentRepository.findAllByMovieAndUserAndDeletedIsFalse(movie, testUser2).size()).isEqualTo(contentList2.size());
+    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser).size()).isEqualTo(contentList1.size());
+    assertThat(movieCommentRepository.findAllByMovieAndUser(movie, testUser2).size()).isEqualTo(contentList2.size());
     assertThat(movieCommentRepository.findAll().size()).isEqualTo(contentList1.size() + contentList2.size());
   }
 }
