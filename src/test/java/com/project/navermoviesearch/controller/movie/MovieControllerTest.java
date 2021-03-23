@@ -7,8 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.project.navermoviesearch.controller.movie.response.MovieResponse;
 import com.project.navermoviesearch.movie.entity.Movie;
-import com.project.navermoviesearch.movie.rating.repository.MovieRatingRepository;
-import com.project.navermoviesearch.movie.rating.service.MovieRatingService;
 import com.project.navermoviesearch.movie.repository.MovieRepository;
 import com.project.navermoviesearch.user.entity.User;
 import com.project.navermoviesearch.user.repository.UserRepository;
@@ -41,16 +39,10 @@ class MovieControllerTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private MovieRatingService movieRatingService;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired
   private MovieRepository movieRepository;
-
-  @Autowired
-  private MovieRatingRepository movieRatingRepository;
 
   private List<User> userList;
   private List<Movie> movieList;
