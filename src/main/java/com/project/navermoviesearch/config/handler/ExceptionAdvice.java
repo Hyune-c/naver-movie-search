@@ -2,6 +2,7 @@ package com.project.navermoviesearch.config.handler;
 
 import com.project.navermoviesearch.config.handler.exception.BusinessException;
 import java.nio.file.AccessDeniedException;
+import java.util.UUID;
 import javax.security.sasl.AuthenticationException;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ExceptionAdvice {
 
+  private UUID createLogId(Exception ex) {
+    UUID uuid = UUID.randomUUID();
+    log.error("### {}, {}", uuid.toString(), ex.getClass().getSimpleName(), ex);
+    return uuid;
+  }
+
   /**
    * 지원하지 않은 HTTP method 호출 할 경우 발생합니다.
    *
@@ -29,8 +36,7 @@ public class ExceptionAdvice {
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
   protected ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-    log.error("### handleHttpRequestMethodNotSupportedException", ex);
-    return ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
+    return ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED, createLogId(ex));
   }
 
   /**
@@ -42,8 +48,7 @@ public class ExceptionAdvice {
   @ExceptionHandler(BindException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ErrorResponse handleBindException(BindException ex) {
-    log.error("### handleBindException", ex);
-    return ErrorResponse.of(ErrorCode.BAD_REQUEST, ex.getBindingResult());
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, ex.getBindingResult(), createLogId(ex));
   }
 
   /**
@@ -55,8 +60,7 @@ public class ExceptionAdvice {
   @ExceptionHandler(AuthenticationException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   protected ErrorResponse handleAuthenticationException(AuthenticationException ex) {
-    log.error("handleAuthenticationException", ex);
-    return ErrorResponse.of(ErrorCode.UNAUTHORIZED);
+    return ErrorResponse.of(ErrorCode.UNAUTHORIZED, createLogId(ex));
   }
 
   /**
@@ -67,10 +71,8 @@ public class ExceptionAdvice {
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  protected ErrorResponse handleMissingServletRequestParameterException(
-      MissingServletRequestParameterException ex) {
-    log.error("### handleMissingServletRequestParameterException", ex);
-    return ErrorResponse.of(ex);
+  protected ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    return ErrorResponse.of(ex, createLogId(ex));
   }
 
   /**
@@ -82,10 +84,8 @@ public class ExceptionAdvice {
    */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  protected ErrorResponse handleMethodArgumentTypeMismatchException(
-      MethodArgumentTypeMismatchException ex) {
-    log.error("### handleMethodArgumentTypeMismatchException", ex);
-    return ErrorResponse.of(ex);
+  protected ErrorResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+    return ErrorResponse.of(ex, createLogId(ex));
   }
 
   /**
@@ -98,15 +98,13 @@ public class ExceptionAdvice {
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ErrorResponse handleConstraintViolationException(ConstraintViolationException ex) {
-    log.error("### handleConstraintViolationException", ex);
-    return ErrorResponse.of(ex);
+    return ErrorResponse.of(ex, createLogId(ex));
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ErrorResponse handleIllegalArgumentException(IllegalArgumentException ex) {
-    log.error("### handleIllegalArgumentException", ex);
-    return ErrorResponse.of(ErrorCode.BAD_REQUEST);
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, createLogId(ex));
   }
 
   /**
@@ -120,8 +118,7 @@ public class ExceptionAdvice {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-    log.error("### handleMethodArgumentNotValidException", ex);
-    return ErrorResponse.of(ErrorCode.BAD_REQUEST, ex.getBindingResult());
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, ex.getBindingResult(), createLogId(ex));
   }
 
   /**
@@ -133,20 +130,17 @@ public class ExceptionAdvice {
   @ExceptionHandler(AccessDeniedException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
   protected ErrorResponse handleAccessDeniedException(AccessDeniedException ex) {
-    log.error("### handleAccessDeniedException", ex);
-    return ErrorResponse.of(ErrorCode.FORBIDDEN);
+    return ErrorResponse.of(ErrorCode.FORBIDDEN, createLogId(ex));
   }
 
   @ExceptionHandler(BusinessException.class)
   protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-    log.error("### handleBusinessException", ex);
-    return new ResponseEntity<>(ErrorResponse.of(ex.getErrorCode()), ex.getErrorCode().getStatus());
+    return new ResponseEntity<>(ErrorResponse.of(ex.getErrorCode(), createLogId(ex)), ex.getErrorCode().getStatus());
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ErrorResponse handleException(Exception ex) {
-    log.error("### handleException", ex);
-    return ErrorResponse.of(ErrorCode.UNKNOWN);
+    return ErrorResponse.of(ErrorCode.UNKNOWN, createLogId(ex));
   }
 }

@@ -3,9 +3,12 @@ package com.project.navermoviesearch.config.handler;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolationException;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -13,56 +16,65 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ErrorResponse {
 
   private String code;
   private String message;
   private LocalDateTime time;
   private List<FieldError> errors;
+  private UUID logId;
 
 
-  private ErrorResponse(ErrorCode errorCode, List<FieldError> errors) {
-    this.code = errorCode.name();
-    this.message = errorCode.getReason();
-    this.time = LocalDateTime.now();
-    this.errors = errors;
+  public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult, UUID logId) {
+    return ErrorResponse.builder()
+        .code(errorCode.name())
+        .message(errorCode.getReason())
+        .time(LocalDateTime.now())
+        .errors(FieldError.of(bindingResult))
+        .logId(logId)
+        .build();
   }
 
-  private ErrorResponse(ErrorCode errorCode) {
-    this.code = errorCode.name();
-    this.message = errorCode.getReason();
-    this.time = LocalDateTime.now();
-    this.errors = new ArrayList<>();
+  public static ErrorResponse of(ErrorCode errorCode, List<FieldError> errors, UUID logId) {
+    return ErrorResponse.builder()
+        .code(errorCode.name())
+        .message(errorCode.getReason())
+        .time(LocalDateTime.now())
+        .errors(errors)
+        .logId(logId)
+        .build();
   }
 
-
-  public static ErrorResponse of(ErrorCode code, BindingResult bindingResult) {
-    return new ErrorResponse(code, FieldError.of(bindingResult));
+  public static ErrorResponse of(ErrorCode errorCode, UUID logId) {
+    return ErrorResponse.builder()
+        .code(errorCode.name())
+        .message(errorCode.getReason())
+        .time(LocalDateTime.now())
+        .errors(new ArrayList<>())
+        .logId(logId)
+        .build();
   }
 
-  public static ErrorResponse of(ErrorCode code) {
-    return new ErrorResponse(code);
-  }
-
-  public static ErrorResponse of(MethodArgumentTypeMismatchException ex) {
+  public static ErrorResponse of(MethodArgumentTypeMismatchException ex, UUID logId) {
     String value = (ex.getValue() == null) ? "" : ex.getValue().toString();
     List<FieldError> errors = List.of(FieldError.of(ex.getName(), value, ex.getErrorCode()));
-    return new ErrorResponse(ErrorCode.BAD_REQUEST, errors);
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, errors, logId);
   }
 
-  public static ErrorResponse of(MissingServletRequestParameterException ex) {
+  public static ErrorResponse of(MissingServletRequestParameterException ex, UUID logId) {
     List<FieldError> errors = List.of(FieldError.of(ex.getParameterName(), null, "Not exist"));
-    return new ErrorResponse(ErrorCode.BAD_REQUEST, errors);
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, errors, logId);
   }
 
-  public static ErrorResponse of(ConstraintViolationException ex) {
-    List<FieldError> errors = ex.getConstraintViolations()
-        .stream()
+  public static ErrorResponse of(ConstraintViolationException ex, UUID logId) {
+    List<FieldError> errors = ex.getConstraintViolations().stream()
         .map(violation ->
             FieldError.of(getPropertyName(violation.getPropertyPath().toString()), null, violation.getMessage()))
         .collect(Collectors.toList());
-    return new ErrorResponse(ErrorCode.BAD_REQUEST, errors);
+    return ErrorResponse.of(ErrorCode.BAD_REQUEST, errors, logId);
   }
 
   private static String getPropertyName(String propertyPath) {
@@ -70,30 +82,27 @@ public class ErrorResponse {
   }
 
   @Getter
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class FieldError {
 
     private String field;
     private String value;
     private String reason;
 
-    private FieldError(String field, String value, String reason) {
-      this.field = field;
-      this.value = value;
-      this.reason = reason;
-    }
-
     public static FieldError of(String field, String value, String reason) {
       return new FieldError(field, value, reason);
     }
 
+    public static FieldError of(org.springframework.validation.FieldError fieldError) {
+      return FieldError.of(
+          fieldError.getField(),
+          (fieldError.getRejectedValue() == null) ? "" : fieldError.getRejectedValue().toString(),
+          fieldError.getDefaultMessage());
+    }
+
     private static List<FieldError> of(BindingResult bindingResult) {
-      return bindingResult.getFieldErrors()
-          .stream()
-          .map(error -> new FieldError(
-              error.getField(),
-              (error.getRejectedValue() == null) ? "" : error.getRejectedValue().toString(),
-              error.getDefaultMessage()))
+      return bindingResult.getFieldErrors().stream()
+          .map(FieldError::of)
           .collect(Collectors.toList());
     }
   }
